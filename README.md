@@ -1,7 +1,7 @@
 verisr2
 =======
 
-This package is to support data analysis within the VERIS framework
+Convenience functions for exploratory analysis on VERIS database
 (<a href="http://veriscommunity.net" class="uri">http://veriscommunity.net</a>).
 
 Small helper functions for working with the data frame objects from the
@@ -148,6 +148,14 @@ enum2grid(vcdb, c("asset.variety", "actor.external.variety"))
 ```
 
 ![](README_files/figure-markdown_github/unnamed-chunk-10-1.png)
+
+Another example:
+
+``` r
+enum2grid(vcdb, c("action", "asset.variety"))
+```
+
+![](README_files/figure-markdown_github/unnamed-chunk-11-1.png)
 
 `importveris()` is a thin wrapper over the `json2veris()` function. In
 later versions of vcdb incidents, the original function may result in a
