@@ -80,7 +80,7 @@ getenum_tbl <- function(data, params){
 
 getenum_df_single <- function(data, params){
   sel <- getenum_stri(data, params)
-  selnames <- gsub("^[a-z.]+", replacement="", sel)
+  selnames <- gsub("^[a-z0-9._ ]+\\.?(?=[A-Z])", replacement="", sel, perl=TRUE)
 
   x <- data.frame("enum" = selnames, "x"=colSums(data[,sel]))
   x <- cbind(x, "n"=nrow(data[rowSums(data[,sel[-length(sel)]]) > 0, ]))
