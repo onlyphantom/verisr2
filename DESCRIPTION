@@ -10,7 +10,8 @@ Imports:
   dplyr (>= 0.7.8),
   ggplot2,
   tidyr (>= 0.8.2),
-  verisr (>= 2.3.1)
+  verisr
+Remotes: vz-risk/verisr
 URL: https://github.com/onlyphantom/verisr2
 BugReports: https://github.com/onlyphantom/verisr2/issues
 Encoding: UTF-8
