@@ -11,7 +11,7 @@ Imports:
   ggplot2,
   tidyr (>= 0.8.2),
   verisr
-Remotes: vz-risk/verisr
+Remotes: onlyphantom/verisr
 URL: https://github.com/onlyphantom/verisr2
 BugReports: https://github.com/onlyphantom/verisr2/issues
 Encoding: UTF-8
