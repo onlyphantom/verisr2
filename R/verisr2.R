@@ -16,14 +16,14 @@ NULL
   packageStartupMessage("Welcome to verisr2. This package is written to add or replace functionalities broken in the old veris package by Jay Jacobs which included many legacy code that has been deprecated. Please file issues on GitHub.")
 }
 
-#' Find all variables in a VCDB data frame from a specified prefix
+#' Find all variables in a VCDB data frame from a specified enumeration
 #'
 #' Find all fields from the data frame where its field name
 #' is immediately preceded by the specified string.
 #'
 #' @param data A \code{data frame} object, typically converted from the VCDB JSON format.
-#' @param string Character or vector of characters representing one or more fields of interest (prefix).
-#' @return a character vector of all variables in the VCDB dataframe that has the speficied prefix
+#' @param string Character or vector of characters representing one or more fields of interest (enumeration).
+#' @return a character vector of all variables in the VCDB dataframe that has the speficied enumeration
 #' @examples
 #' getenum_stri(vcdb, "action.error.vector")
 #' getenum_stri (vcdb, "actor")
@@ -47,7 +47,7 @@ getenum_stri <- function(data, string){
 #' is immediately preceded by the specified string.
 #'
 #' @param data A \code{data frame} object, typically converted from the VCDB JSON format
-#' @param params Character or vector of characters representing one or more fields of interest (prefix)
+#' @param params Character or vector of characters representing one or more fields of interest (enumeration)
 #' @return a frequency table from enumerating on the specified fields of interests
 #' @examples
 #' getenum_tbl(vcdb, c("actor"))
@@ -71,7 +71,7 @@ getenum_tbl <- function(data, params){
 #' @import dplyr
 #' @import tidyr
 #' @param data A \code{data frame} object, typically converted from the VCDB JSON format.
-#' @param params Character representing the fieldsof interest (prefix).
+#' @param params Character representing the fields of interest (enumeration).
 #' @inheritParams getenum_tbl
 #' @return a data frame with count and frequency from enumerating on one field.
 #' @examples

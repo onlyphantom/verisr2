@@ -168,9 +168,92 @@ vcdb_small <- importveris("~/Datasets/vcdb_small/")
 ```
 
     ## [1] "veris dimensions"
-    ## [1]    3 2437
+    ## [1]    0 2437
     ## named integer(0)
     ## named integer(0)
+
+Transform VCDB to a tidyverse-esque data frame
+----------------------------------------------
+
+`collapse_vcdb()` takes a `vcdb` data frame and turns it into a more
+compact data frame that conforms to the “tidyverse” specifications. New
+features are created from the original data, using values that best
+represent each enumeration. An oversimplified diagram explaining this
+process is as follow: ![](README_files/collapse.png)
+
+``` r
+tidy_vcdb <- collapse_vcdb(vcdb)
+str(tidy_vcdb)
+```
+
+    ## Loading verisr2
+
+    ## Welcome to verisr2. This package is written to add or replace functionalities broken in the old veris package by Jay Jacobs which included many legacy code that has been deprecated. Please file issues on GitHub.
+
+    ## 'data.frame':    8198 obs. of  15 variables:
+    ##  $ action                      : Factor w/ 9 levels "Environmental",..: 5 7 2 3 2 2 3 3 7 6 ...
+    ##  $ action.environmental.notes  : chr  NA NA NA NA ...
+    ##  $ action.environmental.variety: Factor w/ 4 levels "Fire","Humidity",..: 4 4 4 4 4 4 4 4 4 4 ...
+    ##  $ action.error.notes          : chr  NA NA NA NA ...
+    ##  $ action.error.variety        : Factor w/ 18 levels "Capacity shortage",..: 18 18 6 18 10 10 18 18 18 18 ...
+    ##  $ action.error.vector         : Factor w/ 8 levels "Carelessness",..: 8 8 8 8 1 1 8 8 8 8 ...
+    ##  $ action.hacking.cve          : chr  NA NA NA NA ...
+    ##  $ action.hacking.notes        : chr  NA NA NA NA ...
+    ##  $ action.hacking.result       : Factor w/ 5 levels "Elevate","Exfiltrate",..: 5 5 5 5 5 5 5 5 5 5 ...
+    ##  $ action.hacking.variety      : Factor w/ 8 levels "Brute force",..: 6 6 6 5 6 6 6 6 6 6 ...
+    ##  $ action.hacking.vector       : Factor w/ 11 levels "Backdoor or C2",..: 9 9 9 11 9 9 11 11 9 9 ...
+    ##  $ action.malware.cve          : chr  NA NA NA NA ...
+    ##  $ action.malware.name         : chr  NA NA NA NA ...
+    ##  $ action.malware.notes        : chr  NA NA NA NA ...
+    ##  $ action.malware.result       : Factor w/ 5 levels "Elevate","Exfiltrate",..: 5 5 5 5 5 5 5 5 5 5 ...
+
+Note that the new data frame is a lot more compact, with 175 instead of
+the original 2,430+ variables:
+
+``` r
+dim(tidy_vcdb)
+```
+
+    ## [1] 8198  175
+
+Where the original VCDB has a shape that resembles a “sparse matrix”,
+this new “tidy” data frame now has most variables as factor and numeric
+values. Obviously some loss of fidelity happens (a 2500-column data
+matrix where most values are 0 are reduced to 175-column where only the
+representative value is stored in each dimension / enumeration):
+
+    ## 
+    ## c("ordered", "factor")              character                 factor 
+    ##                      1                     59                    105 
+    ##                numeric 
+    ##                     10
+
+Combining with `ggplot2`
+------------------------
+
+The data (both the originalo `vcdb` and its tidy variant) also works
+well with the rest of `tidyverse`. An example is to use the data in
+conjunction with `dplyr` and `ggplot2`:
+
+``` r
+vcdb %>%
+  group_by(attribute.confidentiality.data_disclosure.Yes) %>%
+  dplyr::count(timeline.incident.year) %>%
+  ungroup() %>% 
+  mutate(
+    breach = ifelse(attribute.confidentiality.data_disclosure.Yes, 
+                    "Breach", "Incident")
+  ) %>% filter(
+    timeline.incident.year > 2000
+  ) %>% ggplot(aes(x=timeline.incident.year, y=n, group=breach)) +
+  geom_col(aes(fill=breach), position = "dodge") +
+  scale_x_continuous(expand=c(0,0), breaks=seq(2000, 2018, 3)) + 
+  scale_y_continuous(expand=c(0,0)) + 
+  scale_fill_brewer(palette = 11) + 
+  labs(title="VCDB Confidentiality Breaches", caption="Confidentiality breaches where data disclosure occured"
+```
+
+![](README_files/figure-markdown_github/unnamed-chunk-18-1.png)
 
 Credits
 -------

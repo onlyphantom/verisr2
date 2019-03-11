@@ -2,17 +2,17 @@
 % Please edit documentation in R/verisr2.R
 \name{getenum_stri}
 \alias{getenum_stri}
-\title{Find all variables in a VCDB data frame from a specified prefix}
+\title{Find all variables in a VCDB data frame from a specified enumeration}
 \usage{
 getenum_stri(data, string)
 }
 \arguments{
 \item{data}{A \code{data frame} object, typically converted from the VCDB JSON format.}
 
-\item{string}{Character or vector of characters representing one or more fields of interest (prefix).}
+\item{string}{Character or vector of characters representing one or more fields of interest (enumeration).}
 }
 \value{
-a character vector of all variables in the VCDB dataframe that has the speficied prefix
+a character vector of all variables in the VCDB dataframe that has the speficied enumeration
 }
 \description{
 Find all fields from the data frame where its field name

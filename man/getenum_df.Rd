@@ -9,7 +9,7 @@ getenum_df(data, params)
 \arguments{
 \item{data}{A \code{data frame} object, typically converted from the VCDB JSON format}
 
-\item{params}{Character or vector of characters representing one or more fields of interest (prefix)}
+\item{params}{Character or vector of characters representing one or more fields of interest (enumeration)}
 }
 \value{
 a data frame with count and frequency from enumerating on one or more fields.
