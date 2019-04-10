@@ -12,9 +12,9 @@
 #' @name verisr2
 NULL
 
-.onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to verisr2. This package is written to add or replace functionalities broken in the old veris package by Jay Jacobs which included many legacy code that has been deprecated. Please file issues on GitHub.")
-}
+# .onAttach <- function(libname, pkgname) {
+#   packageStartupMessage("Welcome to verisr2. This package is written to add or replace functionalities broken in the old veris package by Jay Jacobs which included many legacy code that has been deprecated. Please file issues on GitHub.")
+# }
 
 #' Find all variables in a VCDB data frame from a specified enumeration
 #'
