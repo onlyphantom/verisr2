@@ -7,8 +7,7 @@
 #' @examples
 #' extract_names("action.hacking.result.Exfiltrate")
 
-extract_names <- function(string) regmatches(string, regexpr(pattern="[[:upper:]]+[A-z ]+[[:alnum:]]", text=string))
-
+extract_names <- function(string) regmatches(string, regexpr(pattern="(?<=[ .])[A-z0-9 ]+$", text=string, perl=TRUE))
 #' Find the largest values
 #'
 #' For each row, find a value that represent the enumeration using \code{max.col}. An internal function that
@@ -86,8 +85,8 @@ determine_impact <- function(data){
 #' extract_enums(vcdb)
 
 extract_enums <- function(vcdb) unique(regmatches(colnames(vcdb),
-                                        regexpr(pattern="[a-z._0-9]*(?=\\.[A-Z]+)",
-                                                        text=colnames(vcdb), perl = TRUE)))
+                                                  regexpr(pattern="[a-z._0-9 ]*(?=\\.[A-Z][A-z ]+$)",
+                                                          text=colnames(vcdb), perl = TRUE)))
 
 #' Process all logical enumerations in a data frame
 #'
