@@ -188,8 +188,6 @@ str(tidy_vcdb)
 
     ## Loading verisr2
 
-    ## Welcome to verisr2. This package is written to add or replace functionalities broken in the old veris package by Jay Jacobs which included many legacy code that has been deprecated. Please file issues on GitHub.
-
     ## 'data.frame':    8198 obs. of  15 variables:
     ##  $ action                      : Factor w/ 9 levels "Environmental",..: 5 7 2 3 2 2 3 3 7 6 ...
     ##  $ action.environmental.notes  : chr  NA NA NA NA ...
@@ -254,6 +252,65 @@ vcdb %>%
 ```
 
 ![](README_files/figure-markdown_github/unnamed-chunk-18-1.png)
+
+Country-level investigation
+---------------------------
+
+Existing functions in this package already allow us with country-level
+inspection pretty effortlessly:
+
+``` r
+summary(tidy_vcdb$actor.external.country, maxsum=8)
+```
+
+    ##  Unknown       US Multiple       RU       CN       PK       SY  (Other) 
+    ##     7320      220      180      110       43       40       36      249
+
+We can use the collapsed dataframe (result of `collapse_vcdb`) to
+perform our inspection:
+
+``` r
+usvictim <- subset(tidy_vcdb, victim.country=="US")
+head(usvictim$notes)
+```
+
+    ## [1] "lincoln financial securities Corporation is a subsidiary of Lincoln national Corporation"                                                                
+    ## [2] "Limited information provided and there have been no follow-up articles."                                                                                 
+    ## [3] "HHS Breach Tool"                                                                                                                                         
+    ## [4] "The Sentry email mistake was modeled seperately. "                                                                                                       
+    ## [5] "I can't discern who was breached here. It says DoD. But it also says satellite manufacturer. I'm assuming the latter working for DoD"                    
+    ## [6] "The final record count was obtained from the HHS Breachtool record for this incident.  It was listed under the partner rather than Owensboro, strangely."
+
+As of version 0.4.0, the new function `involving_country()` allows us to
+query even more effectively for all incidents where a specified country
+is involved:
+
+``` r
+us <- involving_country(data = vcdb, "US")
+head(us$discovery_notes)
+```
+
+    ## [1] "In June 2014, Epic Systems Corp. in Verona received an email that no software company can ignore: Employees of a company working for one of its customers had gained unauthorized access to a restricted website and may have stolen documents that contained trade secrets."
+    ## [2] "actor was arrested on drug charge and they found skimmer and cards, notified employer."                                                                                                                                                                                      
+    ## [3] "Committed ID fraud against her own maid of honor and used her real phone number when establishing fraudulent lines of credit."                                                                                                                                               
+    ## [4] "the FBI was investigating after 2.5GB of data taken from its servers was dumped online and swiftly shared on social media. The union's national site, fop.net, remained offline on Thursday evening"                                                                         
+    ## [5] "Engel said, though, that the university didn’t confirm that data had been breached or learn about its apparent scope until external investigators notified officials July 31, 2018."                                                                                         
+    ## [6] "We have disabled the malware and have reconfigured our point-of-sale and payment card processing systems to enhance the security of these systems"
+
+By default, `involving_country` returns all columns of every incident
+involving that country. If we would like to retrieve only the columns
+where one or more notes are present (discovery notes, incident notes,
+impact notes, actor notes etc - more than 30 of such columns), then set
+`notes_only` to `TRUE`. The function helpfully drops any incident (rows)
+where no notes are present:
+
+``` r
+# only notes-type columns
+us_small <- involving_country(vcdb, "US", notes_only=TRUE)
+dim(us_small)
+```
+
+    ## [1] 1928   30
 
 Credits
 -------

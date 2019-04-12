@@ -136,4 +136,66 @@ getenum_df <- function(data, params){
 }
 
 
+#' Identify all notes columns
+#'
+#' Identify all notes columns
+#'
+#' @return a vector of character containing columns names that are "notes"
+#' @examples
+#' notes_only()
+#'
+#' @seealso \code{\link{involving_country}} where this function is being used
+
+notes_only <- function(){
+  pat <-  ".*[._]{1}(?=notes$)"
+  matches <- regmatches(colnames(vcdb),
+                        regexpr(pat,colnames(vcdb),
+                                perl = TRUE))
+  matches_list <- unique(matches)
+  matches_list <- unname(sapply(matches_list, function(x){
+    paste0(x, "notes")
+  }))
+
+  c("notes",matches_list)
+}
+
+#' Find all incidents involing a specified country, optionally returning only
+#' notes-type columns
+#'
+#' A function that returns all incidents involving a country, where said country
+#' could be a victim, target, conspirator, owner of assets etc.
+#'
+#' When \code{ notes_only } is TRUE, the returned data frame will contain only
+#' columns derived from "notes" relating to the event. The function also helpfully
+#' drop any rows (incident) where all columns values were NA, which indicates
+#' that the incident was reported without any notes.
+#'
+#' @param data A \code{data frame} object, typically converted from the VCDB JSON format.
+#' @param code Two-letter country codes, e.g "US", "ID" etc
+#' @return a data frame containing incidents where the specified country is involved
+#' @examples
+#' involving_country(vcdb, "US", notes_only=TRUE)
+#' involving_country(vcdb, "ID")
+#' @export
+
+involving_country <- function(data, code, notes_only=FALSE){
+  code <- toupper(code)
+  pat = ".*(?=.country.[A-Z]{2}$)"
+  matches <- regmatches(colnames(data),
+                        regexpr(pat,colnames(data),
+                                perl = TRUE))
+  matches_list <- unique(matches)
+  cols_list <- unname(sapply(matches_list, function(x, y=code){
+    paste0(x, ".country.", code)
+  }))
+
+  if (notes_only == TRUE) {
+    colx <- notes_only()
+    data <- data[which(rowSums(data[,cols_list]) > 0), colx]
+    data[!(rowSums(is.na(data))==ncol(data)),]
+  } else{
+    data[which(rowSums(data[,cols_list]) > 0), ]
+  }
+
+}
 
