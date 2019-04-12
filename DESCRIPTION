@@ -1,7 +1,7 @@
 Package: verisr2
 Type: Package
 Title: Convenience functions for exploratory analysis on VERIS database
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: person("Samuel", "Chan", email = "samuel@algorit.ma", role = c("aut", "cre"))
 Description: Small helper functions for working with the typically-wide data frame
     objects from the VERIS Community Database (VCDB).

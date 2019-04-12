@@ -137,7 +137,7 @@ collapse_vcdb <- function(vcdb){
     select_if(is.numeric) %>%
     select_if(~!all(is.na(.))) %>%
     replace(is.na(.), 0) %>%
-    determine_impact() %>%
+    # determine_impact() %>%
     mutate(
       asset.primary_asset = as.factor(determine_primary(., "asset.assets.amount")),
       attribute.confidentiality.primary_attribute = as.factor(determine_primary(., "attribute.confidentiality.data.amount"))
