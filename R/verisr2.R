@@ -156,7 +156,7 @@ notes_only <- function(){
     paste0(x, "notes")
   }))
 
-  c("notes",matches_list)
+  c("notes","summary",matches_list)
 }
 
 #' Find all incidents involing a specified country, optionally returning only
