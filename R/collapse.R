@@ -33,7 +33,9 @@ find_largest <- function(data) extract_names(colnames(data)[max.col(data, ties.m
 
 determine_primary <- function(data, string){
   y <- getenum_stri(data, string)
-  return(ifelse(rowSums(data[,y]) == 0, "Unknown", find_largest(data[,y])))
+
+  ifelse(length(y) == 1, rep(y, nrow(data)),
+         ifelse(rowSums(data[,y]) == 0, "Unknown", find_largest(data[,y])))
 }
 
 #' Determine the primary value from each enumeration group (logical)
@@ -141,10 +143,8 @@ collapse_vcdb <- function(vcdb){
     mutate(
       asset.primary_asset = as.factor(determine_primary(., "asset.assets.amount")),
       attribute.confidentiality.primary_attribute = as.factor(determine_primary(., "attribute.confidentiality.data.amount"))
-    ) %>%
-    select(
-      "asset.primary_asset", "asset.total_amount", "attribute.availability.duration.value", "attribute.confidentiality.data_total", "impact.overall_amount", "timeline.compromise.value", "timeline.discovery.value", "timeline.exfiltration.value", "victim.locations_affected", "victim.revenue.amount", "victim.secondary.amount", "asset.primary_asset", "attribute.confidentiality.primary_attribute"
     )
+  nums <- nums[,colnames(nums) %in% c("asset.primary_asset", "asset.total_amount", "attribute.availability.duration.value", "attribute.confidentiality.data_total", "impact.overall_amount", "timeline.compromise.value", "timeline.discovery.value", "timeline.exfiltration.value", "victim.locations_affected", "victim.revenue.amount", "victim.secondary.amount", "asset.primary_asset", "attribute.confidentiality.primary_attribute")]
 
   x <- vcdb %>%
     mutate(timeline.incident.year = as.factor(timeline.incident.year),
